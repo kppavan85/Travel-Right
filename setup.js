@@ -1,4 +1,7 @@
-"use client";
+const fs = require('fs');
+const path = require('path');
+
+const PAGE = `"use client";
 import { useState, useEffect } from "react";
 
 // ─── TOKENS ────────────────────────────────────────────────────────────────
@@ -84,7 +87,7 @@ function parseList(raw) {
   // pipe-separated
   if (s.includes("|")) return s.split("|").map(x => x.trim()).filter(Boolean);
   // newline-separated
-  if (s.includes("\n")) return s.split("\n").map(x => x.trim()).filter(Boolean);
+  if (s.includes("\\n")) return s.split("\\n").map(x => x.trim()).filter(Boolean);
   // single item
   return [s];
 }
@@ -159,7 +162,7 @@ function RBlocks({ label, val, color, icon }) {
         ))}
         {half===1&&(
           <div style={{ flex:1, height:7, borderRadius:3,
-            background:`linear-gradient(to right,${color} 55%,rgba(255,255,255,0.08) 55%)` }}/>
+            background:\`linear-gradient(to right,\${color} 55%,rgba(255,255,255,0.08) 55%)\` }}/>
         )}
         {Array.from({length:empty}).map((_,i)=>(
           <div key={"e"+i} style={{ flex:1, height:7, borderRadius:3, background:"rgba(255,255,255,0.08)" }}/>
@@ -176,9 +179,9 @@ function Sec({ label, children }) {
       <div style={{ fontSize:11, fontWeight:700, letterSpacing:"0.1em", color:GOLD,
         textTransform:"uppercase", marginBottom:10,
         display:"flex", alignItems:"center", gap:8 }}>
-        <div style={{ flex:1, height:1, background:`linear-gradient(to right,${GOLD}44,transparent)` }}/>
+        <div style={{ flex:1, height:1, background:\`linear-gradient(to right,\${GOLD}44,transparent)\` }}/>
         {label}
-        <div style={{ flex:1, height:1, background:`linear-gradient(to left,${GOLD}44,transparent)` }}/>
+        <div style={{ flex:1, height:1, background:\`linear-gradient(to left,\${GOLD}44,transparent)\` }}/>
       </div>
       {children}
     </div>
@@ -201,12 +204,12 @@ function Card({ d, onClick }) {
         background: isGem ? "rgba(201,168,76,0.04)" : CARD,
         borderRadius:16, overflow:"hidden", cursor:"pointer",
         border: isGem
-          ? `1px solid rgba(201,168,76,${hov?0.65:0.4})`
-          : `1px solid ${hov?"rgba(201,168,76,0.35)":BORDER}`,
+          ? \`1px solid rgba(201,168,76,\${hov?0.65:0.4})\`
+          : \`1px solid \${hov?"rgba(201,168,76,0.35)":BORDER}\`,
         transform: hov ? "translateY(-5px)" : "translateY(0)",
         transition:"all 0.3s cubic-bezier(0.4,0,0.2,1)",
         boxShadow: isGem
-          ? `0 0 ${hov?28:14}px rgba(201,168,76,${hov?0.22:0.1}), 0 4px 20px rgba(0,0,0,0.3)`
+          ? \`0 0 \${hov?28:14}px rgba(201,168,76,\${hov?0.22:0.1}), 0 4px 20px rgba(0,0,0,0.3)\`
           : hov ? "0 24px 60px rgba(0,0,0,0.5)" : "0 4px 20px rgba(0,0,0,0.3)"
       }}>
 
@@ -220,7 +223,7 @@ function Card({ d, onClick }) {
               transition:"transform 0.5s ease" }}/>
         )}
         <div style={{ position:"absolute", inset:0,
-          background:`linear-gradient(to bottom,rgba(0,0,0,0.05) 15%,${ct} 50%,rgba(0,0,0,0.85) 100%)` }}/>
+          background:\`linear-gradient(to bottom,rgba(0,0,0,0.05) 15%,\${ct} 50%,rgba(0,0,0,0.85) 100%)\` }}/>
 
         {isGem
           ? <div style={{ position:"absolute", top:12, left:12, zIndex:2,
@@ -237,7 +240,7 @@ function Card({ d, onClick }) {
         }
 
         <div style={{ position:"absolute", top:12, right:12, zIndex:2,
-          background:"rgba(0,0,0,0.55)", border:`1px solid ${cc}55`,
+          background:"rgba(0,0,0,0.55)", border:\`1px solid \${cc}55\`,
           borderRadius:20, padding:"3px 10px", fontSize:11, fontWeight:600, color:cc }}>
           {d.cat}
         </div>
@@ -253,7 +256,7 @@ function Card({ d, onClick }) {
               📍 {d.state}
             </span>
             <span style={{ background:"rgba(0,0,0,0.65)",
-              border:`1px solid rgba(201,168,76,0.35)`, borderRadius:20,
+              border:\`1px solid rgba(201,168,76,0.35)\`, borderRadius:20,
               padding:"4px 10px", fontSize:13, fontWeight:700, color:GOLD }}>
               ★ {d.rating}
             </span>
@@ -268,7 +271,7 @@ function Card({ d, onClick }) {
             background: isGem ? "rgba(201,168,76,0.1)" : "rgba(16,185,129,0.1)",
             border: isGem ? "1px solid rgba(201,168,76,0.25)" : "1px solid rgba(16,185,129,0.2)",
             borderRadius:20, padding:"2px 10px" }}>
-            {isGem ? `✦ ${d.nick}` : d.nick}
+            {isGem ? \`✦ \${d.nick}\` : d.nick}
           </span>
           <span style={{ fontSize:11, color:MUTED, fontStyle:"italic" }}>explore →</span>
         </div>
@@ -304,7 +307,7 @@ function Modal({ d, onClose }) {
       background:"rgba(0,0,0,0.88)", zIndex:1000, overflow:"auto", padding:"20px 16px" }}>
       <div onClick={e=>e.stopPropagation()} style={{ maxWidth:700, margin:"0 auto",
         background:BG, borderRadius:20,
-        border:`1px solid ${isGem?"rgba(201,168,76,0.4)":BORDER}`,
+        border:\`1px solid \${isGem?"rgba(201,168,76,0.4)":BORDER}\`,
         boxShadow: isGem?"0 0 40px rgba(201,168,76,0.12)":"none",
         overflow:"hidden" }}>
 
@@ -362,11 +365,11 @@ function Modal({ d, onClose }) {
               {i:"📍", v:d.state},
               {i:"👥", v:d.best},
               {i:"🗓", v:d.dur},
-              {i:"₹",  v:`${(d.bMin/1000).toFixed(0)}k–${(d.bMax/1000).toFixed(0)}k`},
+              {i:"₹",  v:\`\${(d.bMin/1000).toFixed(0)}k–\${(d.bMax/1000).toFixed(0)}k\`},
               {i:"",   v:d.cat},
             ].map((p,i)=>(
               <span key={i} style={{ background:"rgba(255,255,255,0.05)",
-                border:`1px solid ${BORDER}`, borderRadius:20,
+                border:\`1px solid \${BORDER}\`, borderRadius:20,
                 padding:"5px 12px", fontSize:12, color:"rgba(255,255,255,0.8)" }}>
                 {p.i&&<span style={{ marginRight:4 }}>{p.i}</span>}{p.v}
               </span>
@@ -404,7 +407,7 @@ function Modal({ d, onClose }) {
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               {d.apt&&(
                 <div style={{ background:"rgba(255,255,255,0.03)",
-                  border:`1px solid ${BORDER}`, borderRadius:10, padding:"12px 14px" }}>
+                  border:\`1px solid \${BORDER}\`, borderRadius:10, padding:"12px 14px" }}>
                   <div style={{ fontSize:12, fontWeight:600,
                     color:"rgba(255,255,255,0.9)", marginBottom:4 }}>✈️ By Flight</div>
                   <div style={{ fontSize:12, color:MUTED, marginBottom:4 }}>{d.apt}</div>
@@ -418,7 +421,7 @@ function Modal({ d, onClose }) {
               )}
               {d.rail&&(
                 <div style={{ background:"rgba(255,255,255,0.03)",
-                  border:`1px solid ${BORDER}`, borderRadius:10, padding:"12px 14px" }}>
+                  border:\`1px solid \${BORDER}\`, borderRadius:10, padding:"12px 14px" }}>
                   <div style={{ fontSize:12, fontWeight:600,
                     color:"rgba(255,255,255,0.9)", marginBottom:4 }}>🚂 By Train</div>
                   <div style={{ fontSize:12, color:MUTED, marginBottom:d.railOpts?4:0 }}>{d.rail}</div>
@@ -427,7 +430,7 @@ function Modal({ d, onClose }) {
               )}
               {d.bus&&(
                 <div style={{ background:"rgba(255,255,255,0.03)",
-                  border:`1px solid ${BORDER}`, borderRadius:10, padding:"12px 14px" }}>
+                  border:\`1px solid \${BORDER}\`, borderRadius:10, padding:"12px 14px" }}>
                   <div style={{ fontSize:12, fontWeight:600,
                     color:"rgba(255,255,255,0.9)", marginBottom:4 }}>🚌 By Bus</div>
                   <div style={{ fontSize:12, color:MUTED, marginBottom:d.busSvcs?4:0 }}>{d.bus}</div>
@@ -478,7 +481,7 @@ function Modal({ d, onClose }) {
             <div style={{ display:"flex", flexWrap:"wrap", gap:6, marginTop:4 }}>
               {d.tags.map((t,i)=>(
                 <span key={i} style={{ background:"rgba(255,255,255,0.04)",
-                  border:`1px solid ${BORDER}`, borderRadius:20,
+                  border:\`1px solid \${BORDER}\`, borderRadius:20,
                   padding:"3px 10px", fontSize:11, color:MUTED }}>
                   #{t.trim()}
                 </span>
@@ -489,7 +492,7 @@ function Modal({ d, onClose }) {
 
         <button onClick={onClose} style={{ display:"block", width:"100%",
           padding:"16px", background:"rgba(201,168,76,0.08)", border:"none",
-          borderTop:`1px solid ${BORDER}`, color:GOLD, fontSize:13,
+          borderTop:\`1px solid \${BORDER}\`, color:GOLD, fontSize:13,
           fontWeight:600, cursor:"pointer", letterSpacing:"0.05em" }}>
           CLOSE
         </button>
@@ -547,10 +550,10 @@ export default function Home() {
         <div style={{ display:"flex", alignItems:"center",
           justifyContent:"center", gap:12, marginBottom:14 }}>
           <div style={{ height:1, width:60,
-            background:`linear-gradient(to right,transparent,${GOLD}66)` }}/>
+            background:\`linear-gradient(to right,transparent,\${GOLD}66)\` }}/>
           <span style={{ color:GOLD, fontSize:16 }}>✦</span>
           <div style={{ height:1, width:60,
-            background:`linear-gradient(to left,transparent,${GOLD}66)` }}/>
+            background:\`linear-gradient(to left,transparent,\${GOLD}66)\` }}/>
         </div>
         <p style={{ fontSize:"clamp(13px,2vw,16px)",
           color:"rgba(255,255,255,0.65)", margin:0, letterSpacing:"0.01em" }}>
@@ -560,7 +563,7 @@ export default function Home() {
 
       {/* MONTH SELECTOR */}
       <div style={{ padding:"0 24px 28px", maxWidth:900, margin:"0 auto" }}>
-        <div style={{ border:`1px solid ${BORDER}`, borderRadius:50,
+        <div style={{ border:\`1px solid \${BORDER}\`, borderRadius:50,
           padding:"6px 8px", display:"flex", gap:2 }}>
           {MONTHS.map(m=>(
             <button key={m} onClick={()=>setMonth(m)}
@@ -590,7 +593,7 @@ export default function Home() {
             {info.highlights.map((h,i)=>(
               <span key={i} style={{ fontSize:12, color:GOLD,
                 background:"rgba(201,168,76,0.08)",
-                border:`1px solid rgba(201,168,76,0.2)`,
+                border:\`1px solid rgba(201,168,76,0.2)\`,
                 borderRadius:20, padding:"4px 12px" }}>
                 {h}
               </span>
@@ -637,3 +640,90 @@ export default function Home() {
     </div>
   );
 }
+`;
+
+const ROUTE = `import Airtable from 'airtable';
+
+const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
+  .base(process.env.AIRTABLE_BASE_ID);
+
+function url(v) {
+  if (!v) return null;
+  if (typeof v === 'string') return v;
+  if (Array.isArray(v) && v[0]) return v[0].url || null;
+  return null;
+}
+
+function sel(v) {
+  if (!v) return null;
+  if (typeof v === 'object' && v.name) return v.name;
+  return v;
+}
+
+export async function GET() {
+  try {
+    const records = [];
+    await base(process.env.AIRTABLE_TABLE_ID)
+      .select({ pageSize: 100 })
+      .eachPage((rows, next) => {
+        rows.forEach(r => {
+          records.push({
+            id:                r.id,
+            destination:       r.get('destination'),
+            state:             r.get('state'),
+            category:          sel(r.get('category')),
+            nickname:          r.get('nickname'),
+            emoji:             r.get('emoji'),
+            gem:               r.get('is_hidden_gem'),
+            best_for:          r.get('best_for'),
+            month:             r.get('month_text') || sel(r.get('month')),
+            trip_duration:     r.get('trip_duration'),
+            overall_rating:    r.get('overall_rating'),
+            safety:            r.get('safety_rating'),
+            beauty:            r.get('beauty_rating'),
+            food:              r.get('food_rating'),
+            budget:            r.get('budget_rating'),
+            transport:         r.get('transport_rating'),
+            crowd_free:        r.get('crowd_free_rating'),
+            weather:           r.get('weather_rating'),
+            stays:             r.get('stays_rating'),
+            short_desc:        r.get('short_description'),
+            tags:              r.get('tags'),
+            why_this_month:    r.get('why_this_month'),
+            travel_intel:      r.get('travel_intel'),
+            must_do:           r.get('must_do'),
+            warnings:          r.get('warnings'),
+            budget_min:        r.get('budget_min_inr'),
+            budget_max:        r.get('budget_max_inr'),
+            nearest_airport:   r.get('nearest_airport'),
+            airport_1_options: r.get('airport_1_options'),
+            airport_2:         r.get('airport_2'),
+            airport_2_options: r.get('airport_2_options'),
+            airport_insight:   r.get('airport_insight'),
+            nearest_railway:   r.get('nearest_railway'),
+            railway_options:   r.get('railway_travel_options'),
+            nearest_bus:       r.get('nearest_bus_stand'),
+            bus_services:      r.get('bus_direct_services'),
+            image_1:           url(r.get('image_1_url')),
+            image_2:           url(r.get('image_2_url')),
+            image_3:           url(r.get('image_3_url')),
+          });
+        });
+        next();
+      });
+    return Response.json({ records });
+  } catch (e) {
+    console.error(e);
+    return Response.json({ error: 'Failed to fetch destinations' }, { status: 500 });
+  }
+}
+`;
+
+const appDir = path.join(__dirname, 'app');
+const apiDir = path.join(__dirname, 'app', 'api', 'destinations');
+fs.mkdirSync(apiDir, { recursive: true });
+fs.writeFileSync(path.join(appDir, 'page.js'), PAGE, 'utf8');
+fs.writeFileSync(path.join(apiDir, 'route.js'), ROUTE, 'utf8');
+console.log('app/page.js written');
+console.log('app/api/destinations/route.js written');
+console.log('Done! Run: rmdir /s /q .next && npm run dev');
